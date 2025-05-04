@@ -9,6 +9,7 @@ class Game {
   private snake: Snake = new Snake();
   private food: Food = new Food();
   private isPlaying: boolean = false;
+  private score: number = 0;
 
   constructor() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -44,6 +45,13 @@ class Game {
     this.drawGrid();
     this.food.draw(this.ctx, CELL_SIZE);
     this.snake.draw(this.ctx, CELL_SIZE);
+
+    this.ctx.strokeStyle = 'black';
+    this.ctx.lineWidth = 3;
+    this.ctx.strokeText(`Score: ${this.score}`, 20, 40);
+    this.ctx.font = "20px 'Press Start 2P'";
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText(`Score: ${this.score}`, 20, 40);
   }
 
   private drawGrid(): void {
@@ -83,6 +91,7 @@ class Game {
 
       if (head.x === this.food.position.x && head.y === this.food.position.y) {
         this.food.respawn();
+        this.score++;
       } else {
         this.snake.removeTail();
       }
