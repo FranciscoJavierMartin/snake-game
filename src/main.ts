@@ -2,6 +2,8 @@ import { CANVAS_SIZE, CELL_SIZE, DIRECTIONS, GRID_SIZE } from '@/constants';
 import { Food } from '@/entities/Food';
 import { Snake } from '@/entities/Snake';
 import { ScreenManager } from '@/managers/ScreeenManager';
+import grassSprite from '/images/grass.jpg';
+import snakeSprite from '/images/sprite_sheet.png';
 import '@/style.css';
 
 class Game {
@@ -13,10 +15,15 @@ class Game {
   private isGameOver: boolean = false;
   private score: number = 0;
   private screenManager: ScreenManager;
+  private background: HTMLImageElement = new Image();
+  private spriteSheet: HTMLImageElement = new Image();
 
   constructor() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
+    this.background.src = grassSprite;
+    this.spriteSheet.src = snakeSprite;
+
     this.screenManager = new ScreenManager(this.canvas, this.ctx);
 
     this.canvas.width = CANVAS_SIZE;
@@ -55,8 +62,15 @@ class Game {
   }
 
   private draw(): void {
+    const pattern = this.ctx.createPattern(this.background, 'repeat');
+
+    if (pattern) {
+      this.ctx.fillStyle = pattern;
+      this.ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    }
+
     this.drawGrid();
-    this.food.draw(this.ctx, CELL_SIZE);
+    this.food.draw(this.ctx, this.spriteSheet);
     this.snake.draw(this.ctx, CELL_SIZE);
 
     this.ctx.strokeStyle = 'black';
