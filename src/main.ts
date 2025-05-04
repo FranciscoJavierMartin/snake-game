@@ -2,6 +2,7 @@ import { CANVAS_SIZE, CELL_SIZE, DIRECTIONS, GRID_SIZE } from '@/constants';
 import { Food } from '@/entities/Food';
 import { Snake } from '@/entities/Snake';
 import { ScreenManager } from '@/managers/ScreeenManager';
+import { AudioManager } from '@/managers/AudioManager';
 import grassSprite from '/images/grass.jpg';
 import snakeSprite from '/images/sprite_sheet.png';
 import '@/style.css';
@@ -15,6 +16,7 @@ class Game {
   private isGameOver: boolean = false;
   private score: number = 0;
   private screenManager: ScreenManager;
+  private audioManager: AudioManager;
   private background: HTMLImageElement = new Image();
   private spriteSheet: HTMLImageElement = new Image();
 
@@ -25,6 +27,7 @@ class Game {
     this.spriteSheet.src = snakeSprite;
 
     this.screenManager = new ScreenManager(this.canvas, this.ctx);
+    this.audioManager = new AudioManager();
 
     this.canvas.width = CANVAS_SIZE;
     this.canvas.height = CANVAS_SIZE;
@@ -41,6 +44,7 @@ class Game {
         (e.code === 'Enter' || e.code === 'Space')
       ) {
         this.isPlaying = true;
+        this.audioManager.playMusic();
       } else if (this.isPlaying) {
         const newDirection = {
           ArrowUp: DIRECTIONS.UP,
@@ -57,6 +61,7 @@ class Game {
         (e.code === 'Enter' || e.code === 'Space')
       ) {
         this.reset();
+        this.audioManager.playMusic();
       }
     });
   }
@@ -124,6 +129,7 @@ class Game {
       if (this.snake.checkCollisions(GRID_SIZE)) {
         this.isPlaying = false;
         this.isGameOver = true;
+        this.audioManager.playGameOver();
       } else {
         this.snake.move();
 
@@ -135,6 +141,7 @@ class Game {
         ) {
           this.food.respawn();
           this.score++;
+          this.audioManager.playGameOver();
         } else {
           this.snake.removeTail();
         }
