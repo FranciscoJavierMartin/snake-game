@@ -65,11 +65,16 @@ export class Snake {
       y: this.head.y + this.nextDirection.y,
     };
 
-    return (
+    const hitWall =
       nextHead.x >= gridSize ||
       nextHead.x < 0 ||
       nextHead.y < 0 ||
-      nextHead.y >= gridSize
+      nextHead.y >= gridSize;
+
+    const hitSelf = this.body.some(
+      (segment) => segment.x === nextHead.x && segment.y === nextHead.y,
     );
+
+    return hitWall || hitSelf;
   }
 }
