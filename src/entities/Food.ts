@@ -6,16 +6,24 @@ interface Position {
 }
 
 export class Food {
-  public position: Position;
+  private _position: Position;
 
   constructor() {
-    this.position = this.getRandomPosition();
+    this._position = this.getRandomPosition();
+  }
+
+  public get position(): Position {
+    return this._position;
   }
 
   public getRandomPosition(): Position {
     const x = Math.floor(Math.random() * GRID_SIZE);
     const y = Math.floor(Math.random() * GRID_SIZE);
     return { x, y };
+  }
+
+  public respawn(): void {
+    this._position = this.getRandomPosition();
   }
 
   public draw(ctx: CanvasRenderingContext2D, cellSize: number): void {

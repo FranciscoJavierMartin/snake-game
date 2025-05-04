@@ -78,6 +78,14 @@ class Game {
 
     if (this.isPlaying && !this.snake.checkCollisions(GRID_SIZE)) {
       this.snake.move();
+
+      const head = this.snake.head;
+
+      if (head.x === this.food.position.x && head.y === this.food.position.y) {
+        this.food.respawn();
+      } else {
+        this.snake.removeTail();
+      }
     } else {
       this.isPlaying = false;
     }

@@ -19,14 +19,22 @@ export class Snake {
     this.nextDirection = { x: 1, y: 0 };
   }
 
+  public get head(): Position {
+    return this.body[0];
+  }
+
+  public removeTail(): void {
+    this.body.pop();
+  }
+
   public move(): void {
     this.direction = this.nextDirection;
     const newHead: Position = {
-      x: this.body[0].x + this.direction.x,
-      y: this.body[0].y + this.direction.y,
+      x: this.head.x + this.direction.x,
+      y: this.head.y + this.direction.y,
     };
     this.body.unshift(newHead);
-    this.body.pop();
+    // this.body.pop();
   }
 
   public changeDirection(newDirection: Position): void {
@@ -54,8 +62,8 @@ export class Snake {
 
   public checkCollisions(gridSize: number): boolean {
     const nextHead: Position = {
-      x: this.body[0].x + this.nextDirection.x,
-      y: this.body[0].y + this.nextDirection.y,
+      x: this.head.x + this.nextDirection.x,
+      y: this.head.y + this.nextDirection.y,
     };
 
     return (
