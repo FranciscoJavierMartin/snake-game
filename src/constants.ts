@@ -32,3 +32,5 @@ export const SPRITES = {
   // Apple
   apple: { x: 0, y: 0 },
 } as const;
+
+export type SpriteKey = keyof typeof SPRITES;

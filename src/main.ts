@@ -71,7 +71,7 @@ class Game {
 
     this.drawGrid();
     this.food.draw(this.ctx, this.spriteSheet);
-    this.snake.draw(this.ctx, CELL_SIZE);
+    this.snake.draw(this.ctx, this.spriteSheet);
 
     this.ctx.strokeStyle = 'black';
     this.ctx.lineWidth = 3;

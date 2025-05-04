@@ -1,3 +1,5 @@
+import { CELL_SIZE, SPRITE_SIZE, SpriteKey, SPRITES } from '@/constants';
+
 interface Position {
   x: number;
   y: number;
@@ -46,15 +48,26 @@ export class Snake {
     }
   }
 
-  public draw(ctx: CanvasRenderingContext2D, cellSize: number): void {
+  public draw(
+    ctx: CanvasRenderingContext2D,
+    spriteSheet: HTMLImageElement,
+  ): void {
     ctx.fillStyle = '#4caf50';
 
-    this.body.forEach((segment) => {
-      ctx.fillRect(
-        segment.x * cellSize,
-        segment.y * cellSize,
-        cellSize,
-        cellSize,
+    this.body.forEach((segment, index) => {
+      const spriteType = this.getSegmentSprite(index);
+      const spriteCoords = SPRITES[spriteType];
+
+      ctx.drawImage(
+        spriteSheet,
+        spriteCoords.x,
+        spriteCoords.y,
+        SPRITE_SIZE,
+        SPRITE_SIZE,
+        segment.x * CELL_SIZE,
+        segment.y * CELL_SIZE,
+        CELL_SIZE,
+        CELL_SIZE,
       );
     });
   }
@@ -76,5 +89,58 @@ export class Snake {
     );
 
     return hitWall || hitSelf;
+  }
+
+  private getSegmentSprite(index: number): SpriteKey {
+    const prev = this.body[index - 1];
+    const current = this.body[index];
+    const next = this.body[index + 1];
+    let segmentSprite: SpriteKey;
+
+    if (index === 0) {
+      if (this.direction.x === 1) {
+        segmentSprite = 'head_right';
+      } else if (this.direction.x === -1) {
+        segmentSprite = 'head_left';
+      } else if (this.direction.y === 1) {
+        segmentSprite = 'head_down';
+      } else {
+        segmentSprite = 'head_up';
+      }
+    } else if (index === this.body.length - 1) {
+      if (prev.x > current.x) {
+        segmentSprite = 'tail_left';
+      } else if (prev.x < current.x) {
+        segmentSprite = 'tail_right';
+      } else if (prev.y > current.y) {
+        segmentSprite = 'tail_up';
+      } else {
+        segmentSprite = 'tail_down';
+      }
+    } else if (prev.x === next.x) {
+      segmentSprite = 'body_vertical';
+    } else if (prev.y === next.y) {
+      segmentSprite = 'body_horizontal';
+    } else if (prev.x < current.x && next.y < current.y) {
+      segmentSprite = 'body_topleft';
+    } else if (prev.y < current.y && next.x < current.x) {
+      segmentSprite = 'body_topleft';
+    } else if (prev.y > current.x && next.y < current.y) {
+      segmentSprite = 'body_topright';
+    } else if (prev.y < current.y && next.x > current.x) {
+      segmentSprite = 'body_topright';
+    } else if (prev.x > current.x && next.y > current.y) {
+      segmentSprite = 'body_bottomright';
+    } else if (prev.y > current.y && next.x > current.x) {
+      segmentSprite = 'body_bottomright';
+    } else if (prev.x < current.x && next.y > current.y) {
+      segmentSprite = 'body_bottomleft';
+    } else if (prev.y > current.y && next.x < current.x) {
+      segmentSprite = 'body_bottomleft';
+    } else {
+      segmentSprite = 'body_horizontal';
+    }
+
+    return segmentSprite;
   }
 }
