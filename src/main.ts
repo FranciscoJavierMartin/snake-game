@@ -4,10 +4,11 @@ import { Snake } from '@/entities/Snake';
 import '@/style.css';
 
 class Game {
-  public canvas: HTMLCanvasElement;
-  public ctx: CanvasRenderingContext2D;
-  public snake: Snake = new Snake();
-  public food: Food = new Food();
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private snake: Snake = new Snake();
+  private food: Food = new Food();
+  private isPlaying: boolean = false;
 
   constructor() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -22,15 +23,19 @@ class Game {
 
   private setupControls(): void {
     document.addEventListener('keydown', (e) => {
-      const newDirection = {
-        ArrowUp: DIRECTIONS.UP,
-        ArrowDown: DIRECTIONS.DOWN,
-        ArrowLeft: DIRECTIONS.LEFT,
-        ArrowRight: DIRECTIONS.RIGHT,
-      }[e.code];
+      if (!this.isPlaying && e.code === 'Enter') {
+        this.isPlaying = true;
+      } else if (this.isPlaying) {
+        const newDirection = {
+          ArrowUp: DIRECTIONS.UP,
+          ArrowDown: DIRECTIONS.DOWN,
+          ArrowLeft: DIRECTIONS.LEFT,
+          ArrowRight: DIRECTIONS.RIGHT,
+        }[e.code];
 
-      if (newDirection) {
-        this.snake.changeDirection(newDirection);
+        if (newDirection) {
+          this.snake.changeDirection(newDirection);
+        }
       }
     });
   }
@@ -71,8 +76,10 @@ class Game {
   private update(): void {
     this.draw();
 
-    if (!this.snake.checkCollisions(GRID_SIZE)) {
+    if (this.isPlaying && !this.snake.checkCollisions(GRID_SIZE)) {
       this.snake.move();
+    } else {
+      this.isPlaying = false;
     }
   }
 
