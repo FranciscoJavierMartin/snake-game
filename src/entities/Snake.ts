@@ -40,4 +40,18 @@ export class Snake {
       );
     });
   }
+
+  public checkCollisions(gridSize: number): boolean {
+    const nextHead: Position = {
+      x: this.body[0].x + this.nextDirection.x,
+      y: this.body[0].y + this.nextDirection.y,
+    };
+
+    return (
+      nextHead.x >= gridSize ||
+      nextHead.x < 0 ||
+      nextHead.y < 0 ||
+      nextHead.y >= gridSize
+    );
+  }
 }

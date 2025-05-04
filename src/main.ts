@@ -54,7 +54,10 @@ class Game {
 
   private update(): void {
     this.draw();
-    this.snake.move();
+
+    if (!this.snake.checkCollisions(GRID_SIZE)) {
+      this.snake.move();
+    }
   }
 
   private startGameLoop(): void {
