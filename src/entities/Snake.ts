@@ -5,6 +5,8 @@ interface Position {
 
 export class Snake {
   public body: Position[];
+  public direction: Position;
+  public nextDirection: Position;
 
   constructor() {
     this.body = [
@@ -12,6 +14,18 @@ export class Snake {
       { x: 9, y: 10 },
       { x: 8, y: 10 },
     ];
+
+    this.direction = { x: 1, y: 0 };
+    this.nextDirection = { x: 1, y: 0 };
+  }
+
+  public move(): void {
+    const newHead: Position = {
+      x: this.body[0].x + this.direction.x,
+      y: this.body[0].y + this.direction.y,
+    };
+    this.body.unshift(newHead);
+    this.body.pop();
   }
 
   public draw(ctx: CanvasRenderingContext2D, cellSize: number): void {

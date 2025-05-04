@@ -16,6 +16,10 @@ class Game {
     this.canvas.width = CANVAS_SIZE;
     this.canvas.height = CANVAS_SIZE;
 
+    this.startGameLoop();
+  }
+
+  private draw(): void {
     this.drawGrid();
     this.food.draw(this.ctx, CELL_SIZE);
     this.snake.draw(this.ctx, CELL_SIZE);
@@ -46,6 +50,17 @@ class Game {
       this.ctx.lineTo(CANVAS_SIZE, CELL_SIZE * i);
       this.ctx.stroke();
     }
+  }
+
+  private update(): void {
+    this.draw();
+    this.snake.move();
+  }
+
+  private startGameLoop(): void {
+    setInterval(() => {
+      this.update();
+    }, 100);
   }
 }
 
