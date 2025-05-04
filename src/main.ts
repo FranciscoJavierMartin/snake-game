@@ -1,4 +1,4 @@
-import { CANVAS_SIZE, CELL_SIZE, GRID_SIZE } from '@/constants';
+import { CANVAS_SIZE, CELL_SIZE, DIRECTIONS, GRID_SIZE } from '@/constants';
 import { Food } from '@/entities/Food';
 import { Snake } from '@/entities/Snake';
 import '@/style.css';
@@ -16,7 +16,23 @@ class Game {
     this.canvas.width = CANVAS_SIZE;
     this.canvas.height = CANVAS_SIZE;
 
+    this.setupControls();
     this.startGameLoop();
+  }
+
+  private setupControls(): void {
+    document.addEventListener('keydown', (e) => {
+      const newDirection = {
+        ArrowUp: DIRECTIONS.UP,
+        ArrowDown: DIRECTIONS.DOWN,
+        ArrowLeft: DIRECTIONS.LEFT,
+        ArrowRight: DIRECTIONS.RIGHT,
+      }[e.code];
+
+      if (newDirection) {
+        this.snake.changeDirection(newDirection);
+      }
+    });
   }
 
   private draw(): void {

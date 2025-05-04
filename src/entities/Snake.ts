@@ -20,12 +20,23 @@ export class Snake {
   }
 
   public move(): void {
+    this.direction = this.nextDirection;
     const newHead: Position = {
       x: this.body[0].x + this.direction.x,
       y: this.body[0].y + this.direction.y,
     };
     this.body.unshift(newHead);
     this.body.pop();
+  }
+
+  public changeDirection(newDirection: Position): void {
+    const isOppositeDirection =
+      (newDirection.x !== 0 && this.direction.x === -newDirection.x) ||
+      (newDirection.y !== 0 && this.direction.y === -newDirection.y);
+
+    if (!isOppositeDirection) {
+      this.nextDirection = newDirection;
+    }
   }
 
   public draw(ctx: CanvasRenderingContext2D, cellSize: number): void {
