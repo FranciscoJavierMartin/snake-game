@@ -34,7 +34,6 @@ export class Snake {
       y: this.head.y + this.direction.y,
     };
     this.body.unshift(newHead);
-    // this.body.pop();
   }
 
   public changeDirection(newDirection: Position): void {
