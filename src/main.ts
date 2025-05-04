@@ -28,7 +28,11 @@ class Game {
 
   private setupControls(): void {
     document.addEventListener('keydown', (e) => {
-      if (!this.isPlaying && (e.code === 'Enter' || e.code === 'Space')) {
+      if (
+        !this.isPlaying &&
+        !this.isGameOver &&
+        (e.code === 'Enter' || e.code === 'Space')
+      ) {
         this.isPlaying = true;
       } else if (this.isPlaying) {
         const newDirection = {
@@ -41,6 +45,11 @@ class Game {
         if (newDirection) {
           this.snake.changeDirection(newDirection);
         }
+      } else if (
+        this.isGameOver &&
+        (e.code === 'Enter' || e.code === 'Space')
+      ) {
+        this.reset();
       }
     });
   }
@@ -123,6 +132,14 @@ class Game {
     setInterval(() => {
       this.update();
     }, 100);
+  }
+
+  private reset(): void {
+    this.snake = new Snake();
+    this.food = new Food();
+    this.score = 0;
+    this.isPlaying = true;
+    this.isGameOver = false;
   }
 }
 
