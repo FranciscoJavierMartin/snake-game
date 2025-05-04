@@ -1,9 +1,11 @@
 import { CANVAS_SIZE, CELL_SIZE, GRID_SIZE } from '@/constants';
+import { Snake } from '@/entities/Snake';
 import '@/style.css';
 
 class Game {
   public canvas: HTMLCanvasElement;
   public ctx: CanvasRenderingContext2D;
+  public snake: Snake = new Snake();
 
   constructor() {
     this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
@@ -13,6 +15,7 @@ class Game {
     this.canvas.height = CANVAS_SIZE;
 
     this.drawGrid();
+    this.snake.draw(this.ctx, CELL_SIZE);
   }
 
   private drawGrid(): void {
